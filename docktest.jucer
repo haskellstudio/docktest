@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="iqHogW" name="docktest" displaySplashScreen="0" reportAppUsage="0"
+              splashScreenColour="Dark" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.docktest" includeBinaryInAppConfig="1"
+              jucerVersion="5.0.1">
+  <MAINGROUP id="CyA0NB" name="docktest">
+    <GROUP id="{8A1AA834-BB2B-6F34-A67B-3D1DFE4170F6}" name="Source">
+      <GROUP id="{AC2BD2B2-ECC7-0360-DCF1-439A26CA1E84}" name="Base">
+        <FILE id="jJCaMg" name="mainComponent.cpp" compile="1" resource="0"
+              file="Source/Base/mainComponent.cpp"/>
+        <FILE id="OQnZIx" name="mainComponent.h" compile="0" resource="0" file="Source/Base/mainComponent.h"/>
+        <FILE id="ZClu9H" name="mainWindow.cpp" compile="1" resource="0" file="Source/Base/mainWindow.cpp"/>
+        <FILE id="EevWnJ" name="mainWindow.h" compile="0" resource="0" file="Source/Base/mainWindow.h"/>
+      </GROUP>
+      <GROUP id="{91DCD0DB-A10B-6B43-69F0-35526F952D4F}" name="Dock">
+        <FILE id="fASsmx" name="DockButtons.h" compile="0" resource="0" file="Source/Dock/DockButtons.h"/>
+        <FILE id="yHUOJm" name="DockHolder.cpp" compile="1" resource="0" file="Source/Dock/DockHolder.cpp"/>
+        <FILE id="T2NLvv" name="DockHolder.h" compile="0" resource="0" file="Source/Dock/DockHolder.h"/>
+        <FILE id="TYXUmh" name="DockManager.cpp" compile="1" resource="0" file="Source/Dock/DockManager.cpp"/>
+        <FILE id="P5TiWO" name="DockManager.h" compile="0" resource="0" file="Source/Dock/DockManager.h"/>
+        <FILE id="L3iUJk" name="DockPanel.cpp" compile="1" resource="0" file="Source/Dock/DockPanel.cpp"/>
+        <FILE id="PS0AmH" name="DockPanel.h" compile="0" resource="0" file="Source/Dock/DockPanel.h"/>
+      </GROUP>
+      <GROUP id="{E484D834-5E1A-A123-94C6-06C69C2FFD2C}" name="LookAndFeel">
+        <FILE id="rqB9vi" name="ScrollBarLookAndFeel.cpp" compile="1" resource="0"
+              file="Source/LookAndFeel/ScrollBarLookAndFeel.cpp"/>
+        <FILE id="fDOKqb" name="ScrollBarLookAndFeel.h" compile="0" resource="0"
+              file="Source/LookAndFeel/ScrollBarLookAndFeel.h"/>
+      </GROUP>
+      <GROUP id="{9442CD02-DE4A-2428-7443-2C7685DFA33C}" name="Panels">
+        <FILE id="e5TyoC" name="BottomPanel.cpp" compile="1" resource="0" file="Source/Panels/BottomPanel.cpp"/>
+        <FILE id="CD1d9h" name="BottomPanel.h" compile="0" resource="0" file="Source/Panels/BottomPanel.h"/>
+        <FILE id="US5YXC" name="CenterPanel.cpp" compile="1" resource="0" file="Source/Panels/CenterPanel.cpp"/>
+        <FILE id="lllizb" name="CenterPanel.h" compile="0" resource="0" file="Source/Panels/CenterPanel.h"/>
+        <FILE id="eoEr3s" name="HeaderPanel.cpp" compile="1" resource="0" file="Source/Panels/HeaderPanel.cpp"/>
+        <FILE id="GHk2GS" name="HeaderPanel.h" compile="0" resource="0" file="Source/Panels/HeaderPanel.h"/>
+        <FILE id="KuRuyQ" name="LeftPanel.cpp" compile="1" resource="0" file="Source/Panels/LeftPanel.cpp"/>
+        <FILE id="kQDYGY" name="LeftPanel.h" compile="0" resource="0" file="Source/Panels/LeftPanel.h"/>
+        <FILE id="qP8Xs5" name="RightPanel.cpp" compile="1" resource="0" file="Source/Panels/RightPanel.cpp"/>
+        <FILE id="DCEST8" name="RightPanel.h" compile="0" resource="0" file="Source/Panels/RightPanel.h"/>
+      </GROUP>
+      <GROUP id="{50402772-7602-8426-B86A-AF5592D0B701}" name="Smoothing">
+        <FILE id="vInvzI" name="SmoothScrollBar.cpp" compile="1" resource="0"
+              file="Source/Smoothing/SmoothScrollBar.cpp"/>
+        <FILE id="V4IuI4" name="SmoothScrollBar.h" compile="0" resource="0"
+              file="Source/Smoothing/SmoothScrollBar.h"/>
+      </GROUP>
+      <GROUP id="{E612B742-AADE-753A-FD35-87AFF48BD05F}" name="Stack">
+        <FILE id="AtuuoG" name="StackHolder.cpp" compile="1" resource="0" file="Source/Stack/StackHolder.cpp"/>
+        <FILE id="MwCSmy" name="StackHolder.h" compile="0" resource="0" file="Source/Stack/StackHolder.h"/>
+        <FILE id="oAiPIx" name="StackManager.cpp" compile="1" resource="0"
+              file="Source/Stack/StackManager.cpp"/>
+        <FILE id="RuCtZ1" name="StackManager.h" compile="0" resource="0" file="Source/Stack/StackManager.h"/>
+        <FILE id="ulZW2G" name="StackPanel.cpp" compile="1" resource="0" file="Source/Stack/StackPanel.cpp"/>
+        <FILE id="SnNjr4" name="StackPanel.h" compile="0" resource="0" file="Source/Stack/StackPanel.h"/>
+      </GROUP>
+      <FILE id="ZgAlXU" name="includes.h" compile="0" resource="0" file="Source/includes.h"/>
+      <FILE id="Jco8Pj" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <VS2015 targetFolder="Builds/VisualStudio2015">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="1" optimisation="1" targetName="docktest"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="x64"
+                       isDebug="0" optimisation="3" targetName="docktest"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_core" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_video" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../JUCE/modules"/>
+      </MODULEPATHS>
+    </VS2015>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
