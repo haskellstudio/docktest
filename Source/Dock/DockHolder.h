@@ -13,6 +13,8 @@ class DockHolder : public juce::Component
 		DockHolder (DockManager* parent, DockPanel* panel, const int type);
 		~DockHolder ();
 	
+		bool _bNeedSetSize;
+
 		const juce::Rectangle<int> getContentBounds();
 		
 		const int getCurrentSize ()			{ return size; }
@@ -36,6 +38,7 @@ class DockHolder : public juce::Component
 		bool isDocked ()					{ return docked; }
 		void setDocked (bool status)		{ docked = status; }
 		
+		void init();
 	private:
 		juce::ComponentAnimator animator;
 		DockManager *manager;
@@ -45,15 +48,17 @@ class DockHolder : public juce::Component
 		bool docked;
 		bool inside;
 		bool open;
+
 		//=====================================================================
 		int button;		// default: 15
 		int padding;	// default: 3
 		//=====================================================================
-		void initConstrainer ();
+
 		//=====================================================================
 		friend class DockPanel;
 		juce::ResizableBorderComponent *resizable;
-		juce::ComponentBoundsConstrainer *constrainer;
+		ScopedPointer<juce::ComponentBoundsConstrainer> constrainer;
+	
 		//=====================================================================
 };
 //=============================================================================

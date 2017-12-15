@@ -4,62 +4,26 @@
 #include "DockManager.h"
 #include "DockPanel.h"
 //=============================================================================
-DockHolder::DockHolder (DockManager* parent, DockPanel* p, const int type)
-	: manager (parent),
-	  panel (p),
-	  orientation (type),
-	  docked (true),
-	  open (false),
-	  inside (false),
-	  resizable (0), 
-	  constrainer (0)
+DockHolder::DockHolder(DockManager* parent, DockPanel* p, const int type)
+	: manager(parent),
+	panel(p),
+	orientation(type),
+	docked(true),
+	open(false),
+	inside(false),
+	resizable(0),
+	constrainer(nullptr),
+	_bNeedSetSize(true)
 {
-	initConstrainer ();
+		init();
 }
 //=============================================================================
 DockHolder::~DockHolder ()
 {
 	deleteAllChildren ();
-	if (constrainer)
-		delete constrainer;
+	constrainer = nullptr;
 }
-//=============================================================================
-void DockHolder::initConstrainer ()
-{
-	switch (orientation)
-	{
-	case CENTER:
-		setSize (manager->getWidth(), manager->getHeight());
-		break;
-	case TOP:
-		setSize (manager->getWidth(), 60);
-		break;
-	case LEFT:
-		constrainer = new juce::ComponentBoundsConstrainer ();
-		constrainer->setMinimumWidth (312);
-		constrainer->setMaximumWidth (401);
-		addAndMakeVisible (resizable = new juce::ResizableBorderComponent (this, constrainer));
-		resizable->setBorderThickness (juce::BorderSize<int> (0, 0, 0, PADDINGSIZE));
-		setSize (312, manager->getHeight());
-		break;
-	case RIGHT:
-		constrainer = new juce::ComponentBoundsConstrainer ();
-		constrainer->setMinimumWidth (312);
-		constrainer->setMaximumWidth (401);
-		addAndMakeVisible (resizable = new juce::ResizableBorderComponent (this, constrainer));
-		resizable->setBorderThickness (juce::BorderSize<int> (0, PADDINGSIZE, 0, 0));
-		setSize (312, manager->getHeight());
-		break;
-	case BOTTOM:
-		constrainer = new juce::ComponentBoundsConstrainer ();
-		constrainer->setMinimumHeight (51);
-		constrainer->setMaximumHeight (217);
-		addAndMakeVisible (resizable = new juce::ResizableBorderComponent (this, constrainer));
-		resizable->setBorderThickness (juce::BorderSize<int> (PADDINGSIZE, 0, 0, 0));
-		setSize (manager->getWidth(), 134);
-		break;
-	}
-}
+
 //=============================================================================
 void DockHolder::paint (juce::Graphics &g)
 {
@@ -230,23 +194,60 @@ const juce::Rectangle<int> DockHolder::getContentBounds ()
 	}
 	return juce::Rectangle <int> ();
 }
+
+
 //=============================================================================
 void DockHolder::resized ()
 {
+
+	
+	int pwidth = getParentWidth();
+	int pheight = getParentHeight();
+
+	switch (orientation)
+	{
+	case CENTER:
+		if (_bNeedSetSize)
+			setSize(pwidth, pheight);
+		break;
+	case TOP:
+		if (_bNeedSetSize)
+			setSize(pwidth, pwidth * 0.1);
+		break;
+	case LEFT:
+		constrainer->setMinimumWidth(pwidth * .1f);
+		constrainer->setMaximumWidth(pwidth * .2f);
+		if(_bNeedSetSize)
+			setSize(pwidth * .15f,  pheight);
+		break;
+	case RIGHT:
+		constrainer->setMinimumWidth(pwidth * .1f);
+		constrainer->setMaximumWidth(pwidth * .2f);
+		if (_bNeedSetSize)
+			setSize(312, pheight);
+		break;
+	case BOTTOM:
+		constrainer->setMinimumHeight(pheight * 0.1);
+		constrainer->setMaximumHeight(pheight * 0.2);
+		if (_bNeedSetSize)
+			setSize(manager->getWidth(), pheight * 0.15);
+		break;
+	}
+
 	if (resizable)
 		resizable->setBounds (0, 0, getWidth(), getHeight());
+
+	_bNeedSetSize = false;
+
 }
 //=============================================================================
 void DockHolder::mouseEnter (const juce::MouseEvent &e)
 {
 	if (docked)
 		return;
-
 	setVisible (true);
-
 	if (panel)
 		panel->content->setVisible (true);
-
 	inside = true;
 }
 //=============================================================================
@@ -317,3 +318,29 @@ void DockHolder::mouseExit (const juce::MouseEvent &e)
 	inside = false;
 }
 //=============================================================================
+
+
+void DockHolder::init()
+{
+	if (!constrainer)
+		constrainer = new juce::ComponentBoundsConstrainer();
+
+	if (!resizable)
+		resizable = new juce::ResizableBorderComponent(this, constrainer);
+
+	if (orientation == LEFT)
+	{
+		addAndMakeVisible(resizable = new juce::ResizableBorderComponent(this, constrainer));
+		resizable->setBorderThickness(juce::BorderSize<int>(0, 0, 0, PADDINGSIZE));
+	}
+	else if (orientation == RIGHT)
+	{
+		addAndMakeVisible(resizable = new juce::ResizableBorderComponent(this, constrainer));
+		resizable->setBorderThickness(juce::BorderSize<int>(0, PADDINGSIZE, 0, 0));
+	}
+	else if (orientation == BOTTOM)
+	{
+		addAndMakeVisible(resizable = new juce::ResizableBorderComponent(this, constrainer));
+		resizable->setBorderThickness(juce::BorderSize<int>(PADDINGSIZE, 0, 0, 0));
+	}
+}

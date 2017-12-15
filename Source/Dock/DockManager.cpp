@@ -28,7 +28,7 @@ DockManager::DockManager ()
 	//rightButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
 	rightButton->addMouseListener (this, true);
 	rightButton->addListener (this);
-
+	//return;
 	addAndMakeVisible (top = new DockHolder(this, 0, TOP), ZORDER_TOP);
 	addAndMakeVisible (bottom = new DockHolder(this, 0, BOTTOM), ZORDER_BOTTOM);
 
@@ -140,17 +140,20 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 //=============================================================================
 void DockManager::paint (juce::Graphics &g)
 {
-	g.fillAll (juce::Colours::black);
+	g.fillAll (juce::Colours::yellow);
 }
 //=============================================================================
 void DockManager::componentMovedOrResized (juce::Component &component, bool wasMoved, bool wasResized)
 {
+	return;
 	if (wasResized)
 		resized ();
 }
 //=============================================================================
 void DockManager::resized ()
 {
+	left->_bNeedSetSize = true;
+	
 	const int w = getWidth();
 	const int h = getHeight();
 
@@ -248,6 +251,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 	juce::Rectangle<int> position;
 	int runningMs;
 
+
 	if (e.eventComponent == topButton)
 	{
 		if (!top->isDocked() && 
@@ -255,8 +259,12 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 		{
 			top->setOpen (true);
 			animate = top;
-			child = dynamic_cast<DockPanel*>(top)->content;
-			child->setAlpha (1.0f);
+			if (top->panel != nullptr)
+			{
+				child = dynamic_cast<DockPanel*>(top)->content;
+				child->setAlpha(1.0f);
+			}
+
 			position = animate->getBounds ();
 			animate->setBounds (position.getX(), 
 								position.getY() - position.getHeight(),
@@ -272,8 +280,13 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 		{
 			left->setOpen (true);
 			animate = left;
-			child = dynamic_cast<DockPanel*>(left)->content;
-			child->setAlpha (1.0f);
+
+			if (left->panel != nullptr)
+			{
+				child = dynamic_cast<DockPanel*>(left)->content;
+				child->setAlpha(1.0f);
+			}
+
 			position = animate->getBounds ();
 			animate->setBounds (position.getX() - position.getWidth(), 
 								position.getY(),
@@ -289,8 +302,12 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 		{
 			right->setOpen (true);
 			animate = right;
-			child = dynamic_cast<DockPanel*>(right)->content;
-			child->setAlpha (1.0f);
+			if (right->panel != nullptr)
+			{
+				child = dynamic_cast<DockPanel*>(right)->content;
+				child->setAlpha(1.0f);
+			}
+
 			position = animate->getBounds ();
 			animate->setBounds (position.getX() + position.getWidth(), 
 								position.getY(),
@@ -306,8 +323,12 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 		{
 			bottom->setOpen (true);
 			animate = bottom;
-			child = dynamic_cast<DockPanel*>(bottom)->content;
-			child->setAlpha (1.0f);
+			if (bottom->panel != nullptr)
+			{
+				child = dynamic_cast<DockPanel*>(bottom)->content;
+				child->setAlpha(1.0f);
+			}
+
 			position = animate->getBounds ();
 			animate->setBounds (position.getX(), 
 								getHeight() + position.getHeight(),
@@ -316,7 +337,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 		}
 	}
 
-	if (animate)
+	if (animate && child)
 	{
 		if (!animator.isAnimating (animate) && !animate->isVisible())
 		{	
@@ -330,28 +351,38 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 
 void DockManager::mouseExit (const juce::MouseEvent &e)
 {
-	juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
-	juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
+	//juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
+	//juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
+	if (left->panel != nullptr)
+	{
+		juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
 
-	if (e.eventComponent == leftButton && !left->isDocked())
-	{
-		if (e.y < leftButton->getY() ||
-			e.y > leftButton->getHeight() - BUTTONSIZE)
+		if (e.eventComponent == leftButton && !left->isDocked())
 		{
-			animator.fadeOut (leftContent, FADEOUTMS);
-			animator.fadeOut (left, FADEOUTMS);
-			left->setOpen (false);
+			if (e.y < leftButton->getY() ||
+				e.y > leftButton->getHeight() - BUTTONSIZE)
+			{
+				animator.fadeOut(leftContent, FADEOUTMS);
+				animator.fadeOut(left, FADEOUTMS);
+				left->setOpen(false);
+			}
 		}
 	}
-	else
-	if (e.eventComponent == rightButton && !right->isDocked())
+
+	
+	if (right->panel != nullptr)
 	{
-		if (e.y < rightButton->getY() ||
-			e.y > rightButton->getHeight() - BUTTONSIZE)
+		juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
+		if (e.eventComponent == rightButton && !right->isDocked())
 		{
-			animator.fadeOut (rightContent, FADEOUTMS);
-			animator.fadeOut (right, FADEOUTMS);
-			right->setOpen (false);
+			if (e.y < rightButton->getY() ||
+				e.y > rightButton->getHeight() - BUTTONSIZE)
+			{
+				animator.fadeOut(rightContent, FADEOUTMS);
+				animator.fadeOut(right, FADEOUTMS);
+				right->setOpen(false);
+			}
 		}
 	}
+
 }

@@ -12,11 +12,11 @@ MainComponent::MainComponent (MainWindow *win)
 	: mainWindow (win)
 {
 	addAndMakeVisible (manager = new DockManager ());
-	manager->setPanelComponent (CENTER, new CenterPanel);
-	manager->setPanelComponent (TOP, new HeaderPanel);
-	manager->setPanelComponent (BOTTOM, new BottomPanel);
+	//manager->setPanelComponent (CENTER, new CenterPanel);
+	//manager->setPanelComponent (TOP, new HeaderPanel);
+	//manager->setPanelComponent (BOTTOM, new BottomPanel);
 	manager->setPanelComponent (LEFT, new LeftPanel);
-	manager->setPanelComponent (RIGHT, new RightPanel);
+	//manager->setPanelComponent (RIGHT, new RightPanel);
 }
 //==============================================================================
 MainComponent::~MainComponent ()
@@ -26,6 +26,8 @@ MainComponent::~MainComponent ()
 //==============================================================================
 void MainComponent::resized ()
 {
-	manager->setBounds (0, 0, getWidth(), getHeight());
+	int w = getWidth();
+	int h = getHeight();
+	manager->setBounds (0, 0, w, h);
 }
 //==============================================================================
