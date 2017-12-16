@@ -33,6 +33,38 @@ class DockHolder : public juce::Component
 
         }
     
+    void setBoundsExTop(int buttonSize)
+    {
+        int pwidth = getParentWidth();
+        int pheight = getParentHeight();
+        
+       setBounds (0, buttonSize, pwidth, pheight*0.1);
+        
+    }
+    void setBoundsExBottom(int buttonSize)
+    {
+        int pwidth = getParentWidth();
+        int pheight = getParentHeight();
+        int bottomHeight = pheight*0.1;
+        setBounds (0, pheight - buttonSize - bottomHeight, pwidth, bottomHeight );
+    }
+    
+    void setBoundsExRight(int buttonSize, int topHeight, int bottomHeight)
+    {
+        int pwidth = getParentWidth();
+        int pheight = getParentHeight();
+        int rightWidth = pwidth * 0.15f;
+        
+       setBounds(pwidth - rightWidth - buttonSize,
+                 buttonSize + topHeight ,
+                 rightWidth,
+                 pheight - topHeight- bottomHeight - (buttonSize*2));
+    }
+    
+    
+    
+
+    
 		juce_UseDebuggingNewOperator
 	protected:
 		friend DockManager;

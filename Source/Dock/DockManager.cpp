@@ -160,17 +160,43 @@ void DockManager::resized ()
 	const int h = getHeight();
 
     const int b = w * 0.01f;//BUTTONSIZE;
-    //int xx = top == nullptr ? 0 :top->getBounds().getHeight();
+ 
+    if(top)
+    {
+        top->setBoundsExTop(b );
+    }
     
-	const int th = top == nullptr ? 0 :top->getBounds().getHeight();;
-    const int lw = left == nullptr ? 0 : left->getBounds().getWidth();
-    const int rw = right == nullptr ? 0 : right->getBounds().getWidth();
+    if(bottom)
+    {
+        bottom->setBoundsExBottom(b);
+    }
+    
+    
+    const int th = (top == nullptr) ? 0 :top->getBounds().getHeight();
+    const bool td = (top == nullptr) ? 0 : top->isDocked();
     const int bh = bottom == nullptr ? 0 : bottom->getBounds().getHeight();
-
-    const bool td = top == nullptr ? 0 : top->isDocked();
-    const bool ld = left == nullptr ? 0 :left->isDocked();
-    const bool rd = right == nullptr ? 0 : right->isDocked();
     const bool bd = bottom == nullptr ? 0 : bottom->isDocked();
+    if(left)
+    {
+        left->setBoundsExLeft(b,    //button size  = > x
+                              (td ? th : 0) ,  //  top height
+                              (bd ? bh : 0)  // bottom height
+                              );
+    }
+    
+	
+    const int lw = left == nullptr ? 0 : left->getBounds().getWidth();
+    const bool ld = left == nullptr ? 0 :left->isDocked();
+    right->setBoundsExRight(b,
+                             (td ? th : 0) ,// top height
+                            (bd ? bh : 0)   // bottom height
+                            );
+
+    
+    
+    const int rw = right == nullptr ? 0 : right->getBounds().getWidth();
+    const bool rd = right == nullptr ? 0 : right->isDocked();
+   
 
 	int cx, cy, cw, ch;
 	cx = b + (ld ? lw : 0);
@@ -179,27 +205,11 @@ void DockManager::resized ()
 	cy = b + (td ? th : 0);
 	ch = h - (td ? th : 0) 
 		   - (bd ? bh : 0) - (b*2);
-
-	if(top) top->setBounds (0, b, w, th);
-
-    
-    if(left)
-    {
-        left->setBoundsExLeft(b,    //button size  = > x
-                          (td ? th : 0) ,  //  top height
-                          (bd ? bh : 0)  // bottom height
-                          );
-    }
-
 	if(center) center->setBounds (cx, cy, cw, ch);
 
-	if(right) right->setBounds (w - rw - b,
-					  b + (td ? th : 0), 
-					  rw, 
-					  h - (td ? th : 0) 
-						- (bd ? bh : 0) - (b*2));
-
-	if(bottom) bottom->setBounds (0, h - b - bh, w, bh);
+    
+    
+    
 
 	if(topButton) topButton->setBounds (0, 0, w, b);
 
