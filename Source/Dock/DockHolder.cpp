@@ -1,6 +1,7 @@
 //=============================================================================
-#include "DockHolder.h"
+
 #include "DockButtons.h"
+#include "DockHolder.h"
 #include "DockManager.h"
 #include "DockPanel.h"
 //=============================================================================
@@ -12,8 +13,7 @@ DockHolder::DockHolder(DockManager* parent, DockPanel* p, const int type)
 	open(false),
 	inside(false),
 	resizable(0),
-	constrainer(nullptr),
-	_bNeedSetSize(true)
+	constrainer(nullptr)
 {
 		init();
 }
@@ -69,10 +69,11 @@ void DockHolder::paint (juce::Graphics &g)
 			const int x1 = button;
 			const int x2 = width-(button+1);
 
-			g.setColour (juce::Colour(0xff333333));
-			g.drawHorizontalLine (y, left, right);
-			g.drawVerticalLine  (x1, top, bottom);
-			g.drawVerticalLine  (x2, top, bottom);
+		//	g.setColour (juce::Colour(0xff333333));
+            g.setColour (juce::Colour(0xff0000ff));
+            g.drawHorizontalLine (y, left, right);
+            g.drawVerticalLine  (x1, top, bottom);
+            g.drawVerticalLine  (x2, top, bottom);
 		}
 	}
 	else
@@ -201,43 +202,38 @@ void DockHolder::resized ()
 {
 
 	
-	int pwidth = getParentWidth();
-	int pheight = getParentHeight();
+    int pwidth = getParentWidth();
+    int pheight = getParentHeight();
 
-	switch (orientation)
-	{
-	case CENTER:
-		if (_bNeedSetSize)
-			setSize(pwidth, pheight);
-		break;
-	case TOP:
-		if (_bNeedSetSize)
-			setSize(pwidth, pwidth * 0.1);
-		break;
-	case LEFT:
-		constrainer->setMinimumWidth(pwidth * .1f);
-		constrainer->setMaximumWidth(pwidth * .2f);
-		if(_bNeedSetSize)
-			setSize(pwidth * .15f,  pheight);
-		break;
-	case RIGHT:
-		constrainer->setMinimumWidth(pwidth * .1f);
-		constrainer->setMaximumWidth(pwidth * .2f);
-		if (_bNeedSetSize)
-			setSize(312, pheight);
-		break;
-	case BOTTOM:
-		constrainer->setMinimumHeight(pheight * 0.1);
-		constrainer->setMaximumHeight(pheight * 0.2);
-		if (_bNeedSetSize)
-			setSize(manager->getWidth(), pheight * 0.15);
-		break;
-	}
+    switch (orientation)
+    {
+//    case CENTER:
+//        if (_bNeedSetSize)
+//            setSize(pwidth, pheight);
+//        break;
+//    case TOP:
+//        if (_bNeedSetSize)
+//            setSize(pwidth, pwidth * 0.1);
+//        break;
+
+    case RIGHT:
+        constrainer->setMinimumWidth(pwidth * .1f);
+        constrainer->setMaximumWidth(pwidth * .2f);
+//        if (_bNeedSetSize)
+//            setSize(312, pheight);
+        break;
+    case BOTTOM:
+        constrainer->setMinimumHeight(pheight * 0.1);
+        constrainer->setMaximumHeight(pheight * 0.2);
+//        if (_bNeedSetSize)
+//            setSize(manager->getWidth(), pheight * 0.15);
+        break;
+    }
 
 	if (resizable)
 		resizable->setBounds (0, 0, getWidth(), getHeight());
 
-	_bNeedSetSize = false;
+	//_bNeedSetSize = false;
 
 }
 //=============================================================================

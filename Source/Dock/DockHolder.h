@@ -12,13 +12,27 @@ class DockHolder : public juce::Component
 	public:
 		DockHolder (DockManager* parent, DockPanel* panel, const int type);
 		~DockHolder ();
-	
-		bool _bNeedSetSize;
+
 
 		const juce::Rectangle<int> getContentBounds();
 		
 		const int getCurrentSize ()			{ return size; }
-		
+    
+        void setBoundsExLeft(int buttonSize, int topHeight, int bottomHeight)
+        {
+            int pwidth = getParentWidth();
+            int pheight = getParentHeight();
+            
+            setBounds (buttonSize,
+                           buttonSize + topHeight,
+                           pwidth * 0.15f,
+                           pheight - topHeight - bottomHeight - (buttonSize*2));
+            
+            constrainer->setMinimumWidth(pwidth * .1f);
+            constrainer->setMaximumWidth(pwidth * .2f);
+
+        }
+    
 		juce_UseDebuggingNewOperator
 	protected:
 		friend DockManager;

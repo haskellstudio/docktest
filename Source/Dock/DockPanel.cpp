@@ -6,7 +6,9 @@ DockPanel::DockPanel (DockManager *parent, juce::Component* component, const int
 	: DockHolder (parent, this, position),
 	  content (component)
 {
+    
 	content->addMouseListener (this, true);
+    //juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "const juce::String &title", "<#const juce::String &message#>");
 	addAndMakeVisible (content);
 }
 

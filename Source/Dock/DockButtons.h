@@ -5,21 +5,21 @@
 
 #define FADEOUTMS 180
 
-#define TOP		0
-#define BOTTOM	1
-#define LEFT	2
-#define RIGHT	3
-#define CENTER	4
+#define TOP        0
+#define BOTTOM    1
+#define LEFT    2
+#define RIGHT    3
+#define CENTER    4
 
-#define ZORDER_CENTER			0
-#define ZORDER_LEFT				1
-#define ZORDER_RIGHT			2
-#define ZORDER_LEFT_BUTTON		3
-#define ZORDER_RIGHT_BUTTON		4
-#define ZORDER_TOP				5
-#define ZORDER_BOTTOM			6
-#define ZORDER_TOP_BUTTON		7
-#define ZORDER_BOTTOM_BUTTON	8
+#define ZORDER_CENTER            0
+#define ZORDER_LEFT                1
+#define ZORDER_RIGHT            2
+#define ZORDER_LEFT_BUTTON        3
+#define ZORDER_RIGHT_BUTTON        4
+#define ZORDER_TOP                5
+#define ZORDER_BOTTOM            6
+#define ZORDER_TOP_BUTTON        7
+#define ZORDER_BOTTOM_BUTTON    8
 
 static juce::DrawablePath* getDockablePath (const int type, const bool on, const bool over)
 {
@@ -50,8 +50,8 @@ static juce::DrawablePath* getDockablePath (const int type, const bool on, const
 					path.addLineSegment (line, 0.05f);
 				}
 			}
-			else
-				path.addTriangle (0.0f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f);
+            else
+                path.addTriangle (0.0f, .5f, 1.0f, 1.0f, 1.0f, 0.0f);
 			break;
 
 		case RIGHT:
@@ -85,9 +85,9 @@ static juce::DrawablePath* getDockablePath (const int type, const bool on, const
 	if (on)
 	{
 		if (over)
-			drawable->setFill (juce::FillType (juce::Colour(0xffcccccc)));
+			drawable->setFill (juce::FillType (juce::Colour(0xff00FF00)));
 		else
-			drawable->setFill (juce::FillType (juce::Colour(0xff999999)));
+			drawable->setFill (juce::FillType (juce::Colour(0xff1AB20A )));
 	}
 	else
 	{
@@ -103,6 +103,11 @@ static juce::DrawableButton* getDockableButton (const juce::String& name, const 
 {
 	juce::DrawableButton * const button = new juce::DrawableButton (name, juce::DrawableButton::ImageFitted);
 
+    button->setColour(DrawableButton::ColourIds::backgroundColourId, Colour (0x00000000));
+    button->setColour(DrawableButton::ColourIds::backgroundOnColourId, Colour (0x00000000));
+    //  leftButton->setColour (TextButton::buttonColourId, Colours::red);
+    //  leftButton->setColour (TextButton::buttonOnColourId, Colours::green);
+    
 	juce::Drawable *normalImage, *overImage, *downImage, *disabledImage;
 	juce::Drawable *normalImageOn, *overImageOn, *downImageOn, *disabledImageOn;
 
@@ -119,6 +124,9 @@ static juce::DrawableButton* getDockableButton (const juce::String& name, const 
 			overImage = getDockablePath (LEFT, false, true);
 			normalImageOn = getDockablePath (LEFT, true, false);
 			overImageOn = getDockablePath (LEFT, true, true);
+            
+           
+            
 			break;
 		case RIGHT:
 			normalImage = getDockablePath (RIGHT, false, false);

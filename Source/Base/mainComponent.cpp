@@ -9,14 +9,16 @@
 #include "../Panels/CenterPanel.h"
 //==============================================================================
 MainComponent::MainComponent (MainWindow *win)
-	: mainWindow (win)
+	: mainWindow (win) ,
+      manager (nullptr)
 {
-	addAndMakeVisible (manager = new DockManager ());
-	//manager->setPanelComponent (CENTER, new CenterPanel);
-	//manager->setPanelComponent (TOP, new HeaderPanel);
-	//manager->setPanelComponent (BOTTOM, new BottomPanel);
-	manager->setPanelComponent (LEFT, new LeftPanel);
-	//manager->setPanelComponent (RIGHT, new RightPanel);
+    addAndMakeVisible (manager = new DockManager ());
+    manager->setPanelComponent (CENTER, new CenterPanel);
+    manager->setPanelComponent (TOP, new HeaderPanel);
+    manager->setPanelComponent (BOTTOM, new BottomPanel);
+    manager->setPanelComponent (LEFT, new LeftPanel);
+    manager->setPanelComponent (RIGHT, new RightPanel);
+
 }
 //==============================================================================
 MainComponent::~MainComponent ()
@@ -28,6 +30,6 @@ void MainComponent::resized ()
 {
 	int w = getWidth();
 	int h = getHeight();
-	manager->setBounds (0, 0, w, h);
+	if(manager) manager->setBounds (0, 0, w, h);
 }
 //==============================================================================

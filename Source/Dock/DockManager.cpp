@@ -7,47 +7,51 @@ DockManager::DockManager ()
 	  topButton (0), leftButton (0), rightButton (0), bottomButton (0),
 	  lastMouseEvent (0)
 {
-	addAndMakeVisible (center = new DockHolder(this, 0, CENTER), ZORDER_CENTER);
+//    addAndMakeVisible (center = new DockHolder(this, 0, CENTER), ZORDER_CENTER);
+//
+//    addAndMakeVisible (left = new DockHolder(this, 0, LEFT), ZORDER_LEFT);
+//    left->addComponentListener (this);
+//
+//    addAndMakeVisible (right = new DockHolder(this, 0, RIGHT), ZORDER_RIGHT);
+//    right->addComponentListener (this);
+//
+//    addAndMakeVisible (top = new DockHolder(this, 0, TOP), ZORDER_TOP);
+//    top->addComponentListener (this);
+//
+//
+//    addAndMakeVisible (bottom = new DockHolder(this, 0, BOTTOM), ZORDER_BOTTOM);
+//    bottom->addComponentListener (this);
+    
+    
 
-	addAndMakeVisible (left = new DockHolder(this, 0, LEFT), ZORDER_LEFT);
-	addAndMakeVisible (right = new DockHolder(this, 0, RIGHT), ZORDER_RIGHT);
+    addAndMakeVisible (leftButton = getDockableButton (juce::String("left"), LEFT), ZORDER_LEFT_BUTTON);// new juce::DrawableButton("tesss", juce::DrawableButton::ImageFitted));
+    leftButton->setToggleState (true, false);
+    leftButton->setClickingTogglesState (true);
+   
+    //leftButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
+    leftButton->addMouseListener (this, true);
+    leftButton->addListener (this);
+    
+    addAndMakeVisible (rightButton = getDockableButton (juce::String("right"), RIGHT), ZORDER_RIGHT_BUTTON);
+    rightButton->setToggleState (false, false);
+    rightButton->setClickingTogglesState (true);
+    //rightButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
+    rightButton->addMouseListener (this, true);
+    rightButton->addListener (this);
 
-	left->addComponentListener (this);
-	right->addComponentListener (this);
+    addAndMakeVisible (topButton = getDockableButton (juce::String("top"), TOP), ZORDER_TOP_BUTTON);
+    topButton->setToggleState (false, false);
+    topButton->setClickingTogglesState (true);
+    //topButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
+    topButton->addMouseListener (this, true);
+    topButton->addListener (this);
 
-	addAndMakeVisible (leftButton = getDockableButton (juce::String("left"), LEFT), ZORDER_LEFT_BUTTON);
-	leftButton->setToggleState (false, false);
-	leftButton->setClickingTogglesState (true);
-	//leftButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
-	leftButton->addMouseListener (this, true);
-	leftButton->addListener (this);
-
-	addAndMakeVisible (rightButton = getDockableButton (juce::String("right"), RIGHT), ZORDER_RIGHT_BUTTON);
-	rightButton->setToggleState (false, false);
-	rightButton->setClickingTogglesState (true);
-	//rightButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
-	rightButton->addMouseListener (this, true);
-	rightButton->addListener (this);
-	//return;
-	addAndMakeVisible (top = new DockHolder(this, 0, TOP), ZORDER_TOP);
-	addAndMakeVisible (bottom = new DockHolder(this, 0, BOTTOM), ZORDER_BOTTOM);
-
-	top->addComponentListener (this);
-	bottom->addComponentListener (this);
-
-	addAndMakeVisible (topButton = getDockableButton (juce::String("top"), TOP), ZORDER_TOP_BUTTON);
-	topButton->setToggleState (false, false);
-	topButton->setClickingTogglesState (true);
-	//topButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
-	topButton->addMouseListener (this, true);
-	topButton->addListener (this);
-
-	addAndMakeVisible (bottomButton = getDockableButton (juce::String("bottom"), BOTTOM), ZORDER_BOTTOM_BUTTON);
-	bottomButton->setToggleState (false, false);
-	bottomButton->setClickingTogglesState (true);
-	//bottomButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
-	bottomButton->addMouseListener (this, true);
-	bottomButton->addListener (this);
+    addAndMakeVisible (bottomButton = getDockableButton (juce::String("bottom"), BOTTOM), ZORDER_BOTTOM_BUTTON);
+    bottomButton->setToggleState (false, false);
+    bottomButton->setClickingTogglesState (true);
+    //bottomButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
+    bottomButton->addMouseListener (this, true);
+    bottomButton->addListener (this);
 }
 //=============================================================================
 DockManager::~DockManager ()
@@ -61,11 +65,11 @@ void DockManager::timerCallback ()
 //=============================================================================
 void DockManager::mousePropagation (const juce::MouseEvent &e, const int position)
 {
-	if (position != TOP)	top->mouseExit (e);
-	if (position != LEFT)	left->mouseExit (e);
-	if (position != RIGHT)	right->mouseExit (e);
-	if (position != BOTTOM) bottom->mouseExit (e);
-	if (position != CENTER) center->mouseExit (e);
+	if (position != TOP && top)	top->mouseExit (e);
+	if (position != LEFT && left)	left->mouseExit (e);
+	if (position != RIGHT && right)	right->mouseExit (e);
+	if (position != BOTTOM && bottom) bottom->mouseExit (e);
+	if (position != CENTER && center) center->mouseExit (e);
 }
 //=============================================================================
 bool DockManager::isDocked (const int position)
@@ -130,17 +134,17 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 					delete bottom;
 				bottom = new DockPanel (this, component, BOTTOM);
 				bottom->addComponentListener (this);
-				addAndMakeVisible (bottom, ZORDER_BOTTOM);
+				addAndMakeVisible(bottom, ZORDER_BOTTOM);
 			}
 			break;
-		default:
+		default: 
 			break;
 	}
 }
 //=============================================================================
 void DockManager::paint (juce::Graphics &g)
 {
-	g.fillAll (juce::Colours::yellow);
+    g.fillAll (juce::Colours::lightpink);
 }
 //=============================================================================
 void DockManager::componentMovedOrResized (juce::Component &component, bool wasMoved, bool wasResized)
@@ -152,22 +156,21 @@ void DockManager::componentMovedOrResized (juce::Component &component, bool wasM
 //=============================================================================
 void DockManager::resized ()
 {
-	left->_bNeedSetSize = true;
-	
 	const int w = getWidth();
 	const int h = getHeight();
 
-	const int b = BUTTONSIZE;
+    const int b = w * 0.01f;//BUTTONSIZE;
+    //int xx = top == nullptr ? 0 :top->getBounds().getHeight();
+    
+	const int th = top == nullptr ? 0 :top->getBounds().getHeight();;
+    const int lw = left == nullptr ? 0 : left->getBounds().getWidth();
+    const int rw = right == nullptr ? 0 : right->getBounds().getWidth();
+    const int bh = bottom == nullptr ? 0 : bottom->getBounds().getHeight();
 
-	const int th = top->getBounds().getHeight();
-	const int lw = left->getBounds().getWidth();
-	const int rw = right->getBounds().getWidth();
-	const int bh = bottom->getBounds().getHeight();
-
-	const bool td = top->isDocked();
-	const bool ld = left->isDocked();
-	const bool rd = right->isDocked();
-	const bool bd = bottom->isDocked();
+    const bool td = top == nullptr ? 0 : top->isDocked();
+    const bool ld = left == nullptr ? 0 :left->isDocked();
+    const bool rd = right == nullptr ? 0 : right->isDocked();
+    const bool bd = bottom == nullptr ? 0 : bottom->isDocked();
 
 	int cx, cy, cw, ch;
 	cx = b + (ld ? lw : 0);
@@ -177,69 +180,91 @@ void DockManager::resized ()
 	ch = h - (td ? th : 0) 
 		   - (bd ? bh : 0) - (b*2);
 
-	top->setBounds (0, b, w, th);
+	if(top) top->setBounds (0, b, w, th);
 
-	left->setBounds (b, 
-					 b + (td ? th : 0), 
-					 lw, 
-					 h - (td ? th : 0) 
-					   - (bd ? bh : 0) - (b*2));
+    
+    if(left)
+    {
+        left->setBoundsExLeft(b,    //button size  = > x
+                          (td ? th : 0) ,  //  top height
+                          (bd ? bh : 0)  // bottom height
+                          );
+    }
 
-	center->setBounds (cx, cy, cw, ch);
+	if(center) center->setBounds (cx, cy, cw, ch);
 
-	right->setBounds (w - rw - b, 
+	if(right) right->setBounds (w - rw - b,
 					  b + (td ? th : 0), 
 					  rw, 
 					  h - (td ? th : 0) 
 						- (bd ? bh : 0) - (b*2));
 
-	bottom->setBounds (0, h - b - bh, w, bh);
+	if(bottom) bottom->setBounds (0, h - b - bh, w, bh);
 
-	topButton->setBounds (0, 0, w, b);
+	if(topButton) topButton->setBounds (0, 0, w, b);
 
-	leftButton->setBounds (0, 
+	if(leftButton)
+    {
+        leftButton->setBounds (0,
 						   b + (td ? th : 0), 
 						   b, 
 						   h - (td ? th : 0) 
 							 - (bd ? bh : 0) - (b*2));
+       // leftButton->setBounds(getLocalBounds());
+    }
+    
 
-	rightButton->setBounds (w - b, 
+	if(rightButton) rightButton->setBounds (w - b,
 							b + (td ? th : 0), 
 							b, 
 							h - (td ? th : 0) 
 							  - (bd ? bh : 0) - (b*2));
 
-	bottomButton->setBounds (0, h - b, w, b);
+	if(bottomButton) bottomButton->setBounds (0, h - b, w, b);
 }
 //=============================================================================
 void DockManager::buttonClicked (juce::Button *button)
 {
 	if (button == topButton)
 	{
-		top->setOpen (!button->getToggleState());
-		top->setDocked (!button->getToggleState());
-		top->setVisible (!button->getToggleState());
+        if(top)
+        {
+            top->setOpen (!button->getToggleState());
+            top->setDocked (!button->getToggleState());
+            top->setVisible (!button->getToggleState());
+        }
 	}
 	else
 	if (button == leftButton)
 	{
-		left->setOpen (!button->getToggleState());
-		left->setDocked (!button->getToggleState());
-		left->setVisible (!button->getToggleState());
+        if(left)
+        {
+            left->setOpen (!button->getToggleState());
+            left->setDocked (!button->getToggleState());
+            left->setVisible (!button->getToggleState());        }
+
 	}
 	else
 	if (button == rightButton)
 	{
-		right->setOpen (!button->getToggleState());
-		right->setDocked (!button->getToggleState());
-		right->setVisible (!button->getToggleState());
+        if(right)
+        {
+            right->setOpen (!button->getToggleState());
+            right->setDocked (!button->getToggleState());
+            right->setVisible (!button->getToggleState());
+        }
+
 	}
 	else
 	if (button == bottomButton)
 	{
-		bottom->setOpen (!button->getToggleState());
-		bottom->setDocked (!button->getToggleState());
-		bottom->setVisible (!button->getToggleState());
+        if(bottom)
+        {
+            bottom->setOpen (!button->getToggleState());
+            bottom->setDocked (!button->getToggleState());
+            bottom->setVisible (!button->getToggleState());
+        }
+
 	}
 	resized ();
 }
@@ -254,6 +279,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 
 	if (e.eventComponent == topButton)
 	{
+        if(top)
 		if (!top->isDocked() && 
 			!top->isOpen())
 		{
@@ -275,6 +301,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 	else
 	if (e.eventComponent == leftButton)
 	{
+        if(left)
 		if (!left->isDocked() && 
 			!left->isOpen())
 		{
@@ -297,6 +324,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 	else
 	if (e.eventComponent == rightButton)
 	{
+        if(right)
 		if (!right->isDocked() && 
 			!right->isOpen())
 		{
@@ -318,6 +346,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 	else
 	if (e.eventComponent == bottomButton)
 	{
+        if(bottom)
 		if (!bottom->isDocked() && 
 			!bottom->isOpen())
 		{
@@ -353,6 +382,7 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 {
 	//juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
 	//juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
+    if(left)
 	if (left->panel != nullptr)
 	{
 		juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
@@ -369,7 +399,7 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 		}
 	}
 
-	
+	if(right)
 	if (right->panel != nullptr)
 	{
 		juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
