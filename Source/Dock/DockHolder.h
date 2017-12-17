@@ -10,7 +10,7 @@ class DockPanel;
 class DockHolder : public juce::Component
 {
 	public:
-		DockHolder (DockManager* parent, DockPanel* panel, const int type);
+		DockHolder (DockManager* parent, DockPanel* panel, const int type, bool isDocked);
 		~DockHolder ();
 
 

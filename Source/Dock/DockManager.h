@@ -31,6 +31,7 @@ class DockManager : public juce::Component,
 		void componentMovedOrResized (juce::Component &component, bool wasMoved, bool wasResized);
 
 		void buttonClicked (juce::Button *button);
+    
 
 	private:
 		DockHolder *top, *bottom, *center, *left, *right;

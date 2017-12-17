@@ -2,8 +2,8 @@
 #include "DockPanel.h"
 #include "DockButtons.h"
 
-DockPanel::DockPanel (DockManager *parent, juce::Component* component, const int position)
-	: DockHolder (parent, this, position),
+DockPanel::DockPanel (DockManager *parent, juce::Component* component, const int position, bool isDocked)
+	: DockHolder (parent, this, position, isDocked),
 	  content (component)
 {
     

@@ -1,7 +1,7 @@
 #include "../includes.h"
 
 #define BUTTONSIZE 15
-#define PADDINGSIZE 3
+#define PADDINGSIZE 13
 
 #define FADEOUTMS 180
 

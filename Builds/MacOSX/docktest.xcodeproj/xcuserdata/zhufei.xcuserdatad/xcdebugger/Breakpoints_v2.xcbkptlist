@@ -9,13 +9,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../../Source/Panels/LeftPanel.cpp"
-            timestampString = "535126218.085688"
+            filePath = "../../Source/Dock/DockManager.cpp"
+            timestampString = "535188031.372568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "LeftPanel::resized ()"
+            startingLineNumber = "427"
+            endingLineNumber = "427"
+            landmarkName = "DockManager::mouseExit (const juce::MouseEvent &amp;e)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

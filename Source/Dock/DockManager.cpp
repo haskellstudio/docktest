@@ -7,49 +7,27 @@ DockManager::DockManager ()
 	  topButton (0), leftButton (0), rightButton (0), bottomButton (0),
 	  lastMouseEvent (0)
 {
-//    addAndMakeVisible (center = new DockHolder(this, 0, CENTER), ZORDER_CENTER);
-//
-//    addAndMakeVisible (left = new DockHolder(this, 0, LEFT), ZORDER_LEFT);
-//    left->addComponentListener (this);
-//
-//    addAndMakeVisible (right = new DockHolder(this, 0, RIGHT), ZORDER_RIGHT);
-//    right->addComponentListener (this);
-//
-//    addAndMakeVisible (top = new DockHolder(this, 0, TOP), ZORDER_TOP);
-//    top->addComponentListener (this);
-//
-//
-//    addAndMakeVisible (bottom = new DockHolder(this, 0, BOTTOM), ZORDER_BOTTOM);
-//    bottom->addComponentListener (this);
-    
-    
-
     addAndMakeVisible (leftButton = getDockableButton (juce::String("left"), LEFT), ZORDER_LEFT_BUTTON);// new juce::DrawableButton("tesss", juce::DrawableButton::ImageFitted));
     leftButton->setToggleState (true, false);
     leftButton->setClickingTogglesState (true);
-   
-    //leftButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
     leftButton->addMouseListener (this, true);
     leftButton->addListener (this);
     
     addAndMakeVisible (rightButton = getDockableButton (juce::String("right"), RIGHT), ZORDER_RIGHT_BUTTON);
     rightButton->setToggleState (false, false);
     rightButton->setClickingTogglesState (true);
-    //rightButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
     rightButton->addMouseListener (this, true);
     rightButton->addListener (this);
 
     addAndMakeVisible (topButton = getDockableButton (juce::String("top"), TOP), ZORDER_TOP_BUTTON);
     topButton->setToggleState (false, false);
     topButton->setClickingTogglesState (true);
-    //topButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
     topButton->addMouseListener (this, true);
     topButton->addListener (this);
 
     addAndMakeVisible (bottomButton = getDockableButton (juce::String("bottom"), BOTTOM), ZORDER_BOTTOM_BUTTON);
     bottomButton->setToggleState (false, false);
     bottomButton->setClickingTogglesState (true);
-    //bottomButton->setBackgroundColours (juce::Colours::black, juce::Colours::black);
     bottomButton->addMouseListener (this, true);
     bottomButton->addListener (this);
 }
@@ -97,7 +75,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 			{
 				if (center)
 					delete center;
-				center = new DockPanel (this, component, CENTER);
+				center = new DockPanel (this, component, CENTER, true);
 				addAndMakeVisible (center, ZORDER_CENTER);
 			}
 			break;
@@ -105,7 +83,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 			{
 				if (left)
 					delete left;
-				left = new DockPanel (this, component, LEFT);
+                left = new DockPanel (this, component, LEFT, (leftButton == nullptr)? false : !leftButton->getToggleState());
 				left->addComponentListener (this);
 				addAndMakeVisible (left, ZORDER_LEFT);
 			}
@@ -114,7 +92,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 			{
 				if (right)
 					delete right;
-				right = new DockPanel (this, component, RIGHT);
+				right = new DockPanel (this, component, RIGHT, (rightButton == nullptr)? false : !rightButton->getToggleState());
 				right->addComponentListener (this);
 				addAndMakeVisible (right, ZORDER_RIGHT);
 			}
@@ -123,7 +101,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 			{
 				if (top)
 					delete top;
-				top = new DockPanel (this, component, TOP);
+				top = new DockPanel (this, component, TOP,  (topButton == nullptr)? false : !topButton->getToggleState());
 				top->addComponentListener (this);
 				addAndMakeVisible (top, ZORDER_TOP);
 			}
@@ -132,7 +110,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 			{
 				if (bottom)
 					delete bottom;
-				bottom = new DockPanel (this, component, BOTTOM);
+				bottom = new DockPanel (this, component, BOTTOM,  (bottomButton == nullptr)? false : !bottomButton->getToggleState());
 				bottom->addComponentListener (this);
 				addAndMakeVisible(bottom, ZORDER_BOTTOM);
 			}
@@ -144,7 +122,7 @@ void DockManager::setPanelComponent (const int position, juce::Component *compon
 //=============================================================================
 void DockManager::paint (juce::Graphics &g)
 {
-    g.fillAll (juce::Colours::lightpink);
+    g.fillAll (juce::Colours::darkgrey);
 }
 //=============================================================================
 void DockManager::componentMovedOrResized (juce::Component &component, bool wasMoved, bool wasResized)
@@ -161,9 +139,13 @@ void DockManager::resized ()
 
     const int b = w * 0.01f;//BUTTONSIZE;
  
+//    if(b < 0)
+//    {
+//        juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "b", "b < 0");
+//    }
     if(top)
     {
-        top->setBoundsExTop(b );
+        top->setBoundsExTop(b);
     }
     
     if(bottom)
@@ -251,7 +233,8 @@ void DockManager::buttonClicked (juce::Button *button)
         {
             left->setOpen (!button->getToggleState());
             left->setDocked (!button->getToggleState());
-            left->setVisible (!button->getToggleState());        }
+            left->setVisible (!button->getToggleState());
+        }
 
 	}
 	else
@@ -281,6 +264,10 @@ void DockManager::buttonClicked (juce::Button *button)
 //=============================================================================
 void DockManager::mouseEnter (const juce::MouseEvent &e)
 {
+    if(animator.isAnimating())
+    {
+        return;
+    }
 	juce::Component *animate = 0;
 	juce::Component *child = 0;
 	juce::Rectangle<int> position;
@@ -311,9 +298,14 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 	else
 	if (e.eventComponent == leftButton)
 	{
+        int b = left->getX();
+        if(b < 0)
+        {
+         //   juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "b", "b < 0");
+        }
         if(left)
 		if (!left->isDocked() && 
-			!left->isOpen())
+			!left->isOpen() )
 		{
 			left->setOpen (true);
 			animate = left;
@@ -325,7 +317,14 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 			}
 
 			position = animate->getBounds ();
-			animate->setBounds (position.getX() - position.getWidth(), 
+            int x = position.getX();
+            int w = position.getWidth();
+            int arg1 = x -w;
+            if(arg1 < -286)
+            {
+                juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "b", "b < 0");
+            }
+			animate->setBounds (arg1,
 								position.getY(),
 								position.getWidth(), 
 								position.getHeight());
@@ -390,6 +389,10 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
 
 void DockManager::mouseExit (const juce::MouseEvent &e)
 {
+    if(animator.isAnimating())
+    {
+        return;
+    }
 	//juce::Component *leftContent = dynamic_cast<DockPanel*>(left)->content;
 	//juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
     if(left)
@@ -399,7 +402,13 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 
 		if (e.eventComponent == leftButton && !left->isDocked())
 		{
-			if (e.y < leftButton->getY() ||
+//            int t1 = e.y;
+//            int t2  = leftButton->getY();
+//
+//            int t3 = leftButton->getHeight()-BUTTONSIZE;
+            
+			if (/*e.y < leftButton->getY() */
+                e.y < BUTTONSIZE ||
 				e.y > leftButton->getHeight() - BUTTONSIZE)
 			{
 				animator.fadeOut(leftContent, FADEOUTMS);
@@ -415,7 +424,8 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 		juce::Component *rightContent = dynamic_cast<DockPanel*>(right)->content;
 		if (e.eventComponent == rightButton && !right->isDocked())
 		{
-			if (e.y < rightButton->getY() ||
+			if (//e.y < rightButton->getY()
+                e.y < BUTTONSIZE||
 				e.y > rightButton->getHeight() - BUTTONSIZE)
 			{
 				animator.fadeOut(rightContent, FADEOUTMS);

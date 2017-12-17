@@ -5,12 +5,12 @@
 #include "DockManager.h"
 #include "DockPanel.h"
 //=============================================================================
-DockHolder::DockHolder(DockManager* parent, DockPanel* p, const int type)
+DockHolder::DockHolder(DockManager* parent, DockPanel* p, const int type, bool isDocked)
 	: manager(parent),
 	panel(p),
 	orientation(type),
-	docked(true),
-	open(false),
+	docked(isDocked),
+	open(isDocked),
 	inside(false),
 	resizable(0),
 	constrainer(nullptr)

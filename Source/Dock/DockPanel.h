@@ -10,7 +10,7 @@ class DockPanel : public DockHolder
 	public:
 		DockPanel (DockManager *parent, 
 				   juce::Component* content, 
-				   const int position);
+				   const int position, bool isDocked);
 		~DockPanel ();
 		//=====================================================================
 		void resized ();
