@@ -322,7 +322,7 @@ void DockManager::mouseEnter (const juce::MouseEvent &e)
             int arg1 = x -w;
             if(arg1 < -286)
             {
-                juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "b", "b < 0");
+              //  juce::AlertWindow::showMessageBox(juce::AlertWindow::AlertIconType::InfoIcon, "b", "b < 0");
             }
 			animate->setBounds (arg1,
 								position.getY(),
@@ -406,9 +406,10 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 //            int t2  = leftButton->getY();
 //
 //            int t3 = leftButton->getHeight()-BUTTONSIZE;
-            
+            int t4 = e.getEventRelativeTo (this).y;
 			if (/*e.y < leftButton->getY() */
-                e.y < BUTTONSIZE ||
+              //  e.y < BUTTONSIZE ||
+                e.getEventRelativeTo (this).y < leftButton->getY() + BUTTONSIZE||
 				e.y > leftButton->getHeight() - BUTTONSIZE)
 			{
 				animator.fadeOut(leftContent, FADEOUTMS);
@@ -425,7 +426,8 @@ void DockManager::mouseExit (const juce::MouseEvent &e)
 		if (e.eventComponent == rightButton && !right->isDocked())
 		{
 			if (//e.y < rightButton->getY()
-                e.y < BUTTONSIZE||
+               // e.y < BUTTONSIZE||
+                 e.getEventRelativeTo (this).y < leftButton->getY() + BUTTONSIZE||
 				e.y > rightButton->getHeight() - BUTTONSIZE)
 			{
 				animator.fadeOut(rightContent, FADEOUTMS);
